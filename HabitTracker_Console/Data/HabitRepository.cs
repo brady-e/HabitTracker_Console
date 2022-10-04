@@ -34,7 +34,7 @@ namespace HabitTracker_Console.Data
 
             using (var connection = new SqliteConnection(connectionString))
             {
-                using (var insertCmd = connection.CreateCommand(connectionString))
+                using (var insertCmd = connection.CreateCommand())
                 {
                     // Define command parameters.
                     
