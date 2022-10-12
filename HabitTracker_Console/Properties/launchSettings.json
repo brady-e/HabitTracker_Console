@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "HabitTracker_Console": {
+      "commandName": "Project",
+      "workingDirectory": "C:\\Users\\brady\\source\\repos\\HabitTracker_Console\\HabitTracker_Console"
+    }
+  }
+}

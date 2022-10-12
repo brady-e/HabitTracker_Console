@@ -1,5 +1,11 @@
-﻿// See https://aka.ms/new-console-template for more information
+﻿using HabitTracker_Console.Data;
 
-Console.WriteLine("Welcome to your habit tracker!");
+internal class Program
+{
+    private static void Main(string[] args)
+    {
+        Console.WriteLine("Welcome to your habit tracker!");
 
-
+        HabitRepository.CreateDatabase();
+    }
+}

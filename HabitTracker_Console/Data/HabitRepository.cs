@@ -6,7 +6,7 @@ namespace HabitTracker_Console.Data
     internal class HabitRepository
     {
         static readonly string connectionString = @"Data Source=habit-Tracker.db";
-        void CreateDatabase()
+        public static void CreateDatabase()
         {
             using (var connection = new SqliteConnection(connectionString))
             {
@@ -15,7 +15,7 @@ namespace HabitTracker_Console.Data
                 {
                     connection.Open();
                     tableCmd.CommandText =
-                        @"CREATE TABLE IF NOT EXISTS yourHabit (
+                        @"CREATE TABLE IF NOT EXISTS drinking_water (
                         Id INTEGER PRIMARY KEY AUTOINCREMENT,
                         Date TEXT,
                         Quantity INTEGER
@@ -27,7 +27,7 @@ namespace HabitTracker_Console.Data
             }
         }
 
-        void InsertHabit(DateTime dateTime, int quantity)
+        public void InsertHabit(DateTime dateTime, int quantity)
         {
             var query = "INSERT INTO yourHabit(Date, Quantity)" +
                 "VALUES (@dateTime, @quantity)";
@@ -37,6 +37,11 @@ namespace HabitTracker_Console.Data
                 using (var insertCmd = connection.CreateCommand())
                 {
                     // Define command parameters.
+                    insertCmd.CommandText = @"INSERT INTO drinking_water (Date, Quantity) VALUEs (?,?)";
+                    insertCmd.Parameters.Add(dateTime);
+                    insertCmd.Parameters.Add(quantity);
+                    connection.Open(); // Can this be after CommandText?
+                    insertCmd.ExecuteNonQuery();
                     
                 }
             }
