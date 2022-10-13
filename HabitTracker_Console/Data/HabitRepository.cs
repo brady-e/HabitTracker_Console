@@ -1,5 +1,4 @@
 ﻿using Microsoft.Data.Sqlite;
-using Microsoft.EntityFrameworkCore.Sqlite;
 
 namespace HabitTracker_Console.Data
 {
@@ -27,7 +26,7 @@ namespace HabitTracker_Console.Data
             }
         }
 
-        public void InsertHabit(DateTime dateTime, int quantity)
+        public static void InsertHabit(DateTime dateTime, double quantity)
         {
             var query = "INSERT INTO yourHabit(Date, Quantity)" +
                 "VALUES (@dateTime, @quantity)";
