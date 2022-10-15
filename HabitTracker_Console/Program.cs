@@ -1,5 +1,6 @@
 ﻿using HabitTracker_Console.Data;
 using System.Data;
+using System.Xml;
 
 internal class Program
 {
@@ -21,7 +22,8 @@ internal class Program
 
         while (!endApp)
         {
-            Console.WriteLine(@"Type an option from below:
+            Console.WriteLine(@"
+            Type an option from below:
             U - Update log with new entry
             R - Read existing logs
             T - See habit total
@@ -36,7 +38,6 @@ internal class Program
             switch (menu_response)
             {
                 case "u":
-                    Console.WriteLine("Update");
                     Console.WriteLine("Type the amount of water you drank and press enter.\n");
                     var quantity = Console.ReadLine();
                     double clean_quantity = 0;
@@ -45,16 +46,20 @@ internal class Program
                         Console.WriteLine("This is not a valid input. Please enter an integer value.");
                         quantity = Console.ReadLine();
                     }
+
+                    // Add user inputs and date/time to database.
                     HabitRepository.InsertHabit(date, clean_quantity);
                     break;
                 case "r":
-                    Console.WriteLine("Read");
+                    var tableData = HabitRepository.GetAllRecords();
+
                     break;
                 case "t":
                     Console.WriteLine("See habit total");
                     break;
                 case "x":
-                    Console.WriteLine("Clear the log");
+                    HabitRepository.DeleteTable();
+                    Console.WriteLine("The log has been cleared!");
                     break;
                 case "e":
                     endApp = true;
