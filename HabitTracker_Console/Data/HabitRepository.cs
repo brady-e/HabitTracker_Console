@@ -28,9 +28,6 @@ namespace HabitTracker_Console.Data
 
         public static void InsertHabit(DateTime dateTime, double quantity)
         {
-            var query = "INSERT INTO yourHabit(Date, Quantity)" +
-                "VALUES (@dateTime, @quantity)";
-
             using (var connection = new SqliteConnection(connectionString))
             {
                 using (var insertCmd = connection.CreateCommand())
