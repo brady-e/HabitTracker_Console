@@ -1,5 +1,7 @@
 ﻿using HabitTracker_Console.Data;
 using System.Data;
+using System.Globalization;
+using System.Reflection.PortableExecutable;
 using System.Xml;
 
 internal class Program
@@ -22,46 +24,62 @@ internal class Program
 
         while (!endApp)
         {
-            Console.WriteLine(@"
-            Type an option from below:
-            U - Update log with new entry
-            R - Read existing logs
-            T - See habit total
-            X - Clear the log
-            E - Exit the app");
+            Console.WriteLine($@"
+Type an option from below:
+I - Insert new entry
+R - Read existing log entries
+T - See habit total
+U - Update an entry
+D - Delete an entry
+X - Clear the log
+E - Exit the app
+");
 
             string menu_response = Console.ReadLine();
             menu_response = menu_response.ToLower();
 
-            var date = DateTime.UtcNow;
 
             switch (menu_response)
             {
-                case "u":
-                    Console.WriteLine("Type the amount of water you drank and press enter.\n");
-                    var quantity = Console.ReadLine();
-                    double clean_quantity = 0;
-                    while (!double.TryParse(quantity, out clean_quantity))
-                    {
-                        Console.WriteLine("This is not a valid input. Please enter an integer value.");
-                        quantity = Console.ReadLine();
-                    }
-
-                    // Add user inputs and date/time to database.
-                    HabitRepository.InsertHabit(date, clean_quantity);
+                case "i":
+                    Console.Clear();
+                    int quantity = GetNumberInput("Type the amount of water you drank and press enter.\n");
+                    var date = GetDateInput("Enter the date.");
+                    HabitRepository.InsertHabit(date, quantity);
                     break;
                 case "r":
-                    var tableData = HabitRepository.GetAllRecords();
-
+                    Console.Clear();
+                    HabitRepository.GetAllRecords();
                     break;
                 case "t":
+                    Console.Clear();
                     Console.WriteLine("See habit total");
                     break;
+                case "u":
+                    Console.Clear();
+                    HabitRepository.GetAllRecords();
+                    int Id_to_update = GetNumberInput("Enter the Id of the entry you want to update.\n");
+                    int new_quantity = GetNumberInput("Enter the new quantity.\n");
+                    break;
+                case "d":
+                    Console.Clear();
+                    HabitRepository.GetAllRecords();
+                    int Id_to_delete = GetNumberInput("Enter the Id you wish to delete.");
+                    HabitRepository.Delete(Id_to_delete);
+                    break;
                 case "x":
-                    HabitRepository.DeleteTable();
-                    Console.WriteLine("The log has been cleared!");
+                    Console.Clear();
+                    Console.WriteLine("You are about to clear the entire log. Enter X to continue, or enter any other key to return to the menu.");
+                    string userConfirm = Console.ReadLine();
+                    if (userConfirm.ToLower() == "x")
+                    {
+                        HabitRepository.Delete();
+                        Console.WriteLine("The log has been cleared!");
+                    }
                     break;
                 case "e":
+                    Console.Clear();
+                    Console.WriteLine("Goodbye!");
                     endApp = true;
                     break;
                 default:
@@ -69,5 +87,35 @@ internal class Program
                     break;
             }
         }
+    }
+
+    private static int GetNumberInput(string message)
+    {
+        Console.WriteLine(message);
+        var numInput = Console.ReadLine();
+
+        while (!Int32.TryParse(numInput, out _) || Convert.ToInt32(numInput) < 0)
+        {
+            Console.WriteLine("\n\nInvalid number. Please try again.\n\n");
+            numInput = Console.ReadLine();
+        }
+        int finalInput = Convert.ToInt32(numInput);
+
+        return finalInput;
+    }
+
+    private static DateTime GetDateInput(string message)
+    {
+        Console.WriteLine(message);
+        string dateInput = Console.ReadLine();
+
+        string format = "yyyy-MM-dd";
+        while (!DateTime.TryParseExact(dateInput, format, new CultureInfo("en-US"), DateTimeStyles.None))
+        {
+            Console.Write("\n\nInvalid date. Please try again using the format yyyy-MM-dd.\n\n");
+            dateInput = Console.ReadLine();
+        }
+        var finalInput = DateTime.ParseExact(dateInput, "yyyy-MM-dd", new CultureInfo("en-US"));
+        return finalInput;
     }
 }

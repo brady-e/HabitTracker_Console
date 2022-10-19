@@ -44,14 +44,21 @@ namespace HabitTracker_Console.Data
                 }
             }
         }
-        public static void DeleteTable()
+        public static void Delete(int ID = -1)
         {
             using (var connection = new SqliteConnection(connectionString))
             {
                 using (var deleteCmd = connection.CreateCommand())
                 {
                     // Define command parameters.
-                    deleteCmd.CommandText = @"DELETE FROM drinking_water";
+                    if (ID == -1)
+                    {
+                        deleteCmd.CommandText = @"DELETE FROM drinking_water";
+                    }
+                    else
+                    {
+                        deleteCmd.CommandText = $@"DELETE FROM drinking_water WHERE Id={ID}";
+                    }
                     connection.Open();
                     deleteCmd.ExecuteNonQuery();
 
@@ -59,7 +66,7 @@ namespace HabitTracker_Console.Data
             }
         }
 
-        public static List<DrinkingWater> GetAllRecords()
+        public static void GetAllRecords()
         {
             // Read the contents of the table.
             using (var connection = new SqliteConnection(connectionString))
@@ -87,20 +94,23 @@ namespace HabitTracker_Console.Data
                                 Quantity = reader.GetInt32(2)
                             }
                         ); ;
-                        }
-                        
+                        } 
                     }
                     else
                     {
                         Console.WriteLine("No rows found.");
                     }
-
-                    return tableData;
-
+                    // Print results
+                    Console.WriteLine("___________________________________\n");
+                    foreach (var dw in tableData)
+                    {
+                        Console.WriteLine($"{dw.ID} - {dw.Date.ToString("dd-MMM-yyyy")} - Quantity: {dw.Quantity}");
+                    }
+                    Console.WriteLine("___________________________________\n");
                 }
             }
+            }
 
-        }
 
         public class DrinkingWater
         {
