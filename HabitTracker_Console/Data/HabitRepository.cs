@@ -18,7 +18,7 @@ namespace HabitTracker_Console.Data
                     tableCmd.CommandText =
                         @"CREATE TABLE IF NOT EXISTS drinking_water (
                         Id INTEGER PRIMARY KEY AUTOINCREMENT,
-                        Date TEXT,
+                        Curr_date TEXT,
                         Quantity INTEGER
                         )";
 
@@ -35,8 +35,8 @@ namespace HabitTracker_Console.Data
                 using (var insertCmd = connection.CreateCommand())
                 {
                     // Define command parameters.
-                    insertCmd.CommandText = @"INSERT INTO drinking_water (Date, Quantity) VALUES ($dateTime,$quantity)";
-                    insertCmd.Parameters.AddWithValue("$dateTime",dateTime.ToString("yyyy-MM-dd HH:mm"));
+                    insertCmd.CommandText = @"INSERT INTO drinking_water (Curr_date, Quantity) VALUES ($dateTime,$quantity)";
+                    insertCmd.Parameters.AddWithValue("$dateTime",dateTime.ToString("yyyy-MM-dd"));
                     insertCmd.Parameters.AddWithValue("$quantity",quantity);
                     connection.Open();
                     insertCmd.ExecuteNonQuery();
@@ -109,7 +109,17 @@ namespace HabitTracker_Console.Data
                     Console.WriteLine("___________________________________\n");
                 }
             }
-            }
+        }
+
+/*        public static int TotalEntries(int total_months)
+        {
+            using (var connection = new SqliteConnection(connectionString))
+            {
+                using (var totalCmd = connection.CreateCommand())
+                {
+                    totalCmd.CommandText = 
+                }
+        }*/
 
 
         public class DrinkingWater

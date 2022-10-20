@@ -1,4 +1,5 @@
 ﻿using HabitTracker_Console.Data;
+using HabitTracker_Console.Models;
 using System.Data;
 using System.Globalization;
 using System.Reflection.PortableExecutable;
@@ -14,108 +15,10 @@ internal class Program
         // Create the repository.
         HabitRepository.CreateDatabase();
 
-        Menu();
+        // Call the menu loop from Menu_Controller
+        MenuController.menu_options();
 
-    }
-
-    private static void Menu()
-    {
-        bool endApp = false;
-
-        while (!endApp)
-        {
-            Console.WriteLine($@"
-Type an option from below:
-I - Insert new entry
-R - Read existing log entries
-T - See habit total
-U - Update an entry
-D - Delete an entry
-X - Clear the log
-E - Exit the app
-");
-
-            string menu_response = Console.ReadLine();
-            menu_response = menu_response.ToLower();
-
-
-            switch (menu_response)
-            {
-                case "i":
-                    Console.Clear();
-                    int quantity = GetNumberInput("Type the amount of water you drank and press enter.\n");
-                    var date = GetDateInput("Enter the date.");
-                    HabitRepository.InsertHabit(date, quantity);
-                    break;
-                case "r":
-                    Console.Clear();
-                    HabitRepository.GetAllRecords();
-                    break;
-                case "t":
-                    Console.Clear();
-                    Console.WriteLine("See habit total");
-                    break;
-                case "u":
-                    Console.Clear();
-                    HabitRepository.GetAllRecords();
-                    int Id_to_update = GetNumberInput("Enter the Id of the entry you want to update.\n");
-                    int new_quantity = GetNumberInput("Enter the new quantity.\n");
-                    break;
-                case "d":
-                    Console.Clear();
-                    HabitRepository.GetAllRecords();
-                    int Id_to_delete = GetNumberInput("Enter the Id you wish to delete.");
-                    HabitRepository.Delete(Id_to_delete);
-                    break;
-                case "x":
-                    Console.Clear();
-                    Console.WriteLine("You are about to clear the entire log. Enter X to continue, or enter any other key to return to the menu.");
-                    string userConfirm = Console.ReadLine();
-                    if (userConfirm.ToLower() == "x")
-                    {
-                        HabitRepository.Delete();
-                        Console.WriteLine("The log has been cleared!");
-                    }
-                    break;
-                case "e":
-                    Console.Clear();
-                    Console.WriteLine("Goodbye!");
-                    endApp = true;
-                    break;
-                default:
-                    Console.WriteLine("Error! Please select an option from the menu.");
-                    break;
-            }
-        }
-    }
-
-    private static int GetNumberInput(string message)
-    {
-        Console.WriteLine(message);
-        var numInput = Console.ReadLine();
-
-        while (!Int32.TryParse(numInput, out _) || Convert.ToInt32(numInput) < 0)
-        {
-            Console.WriteLine("\n\nInvalid number. Please try again.\n\n");
-            numInput = Console.ReadLine();
-        }
-        int finalInput = Convert.ToInt32(numInput);
-
-        return finalInput;
-    }
-
-    private static DateTime GetDateInput(string message)
-    {
-        Console.WriteLine(message);
-        string dateInput = Console.ReadLine();
-
-        string format = "yyyy-MM-dd";
-        while (!DateTime.TryParseExact(dateInput, format, new CultureInfo("en-US"), DateTimeStyles.None))
-        {
-            Console.Write("\n\nInvalid date. Please try again using the format yyyy-MM-dd.\n\n");
-            dateInput = Console.ReadLine();
-        }
-        var finalInput = DateTime.ParseExact(dateInput, "yyyy-MM-dd", new CultureInfo("en-US"));
-        return finalInput;
+        // menu_options has been exited, program ending.
+        Console.WriteLine("\n Goodybe! \n");
     }
 }
