@@ -111,15 +111,19 @@ namespace HabitTracker_Console.Data
             }
         }
 
-/*        public static int TotalEntries(int total_months)
+        public static int TotalEntries(int total_months)
         {
             using (var connection = new SqliteConnection(connectionString))
             {
                 using (var totalCmd = connection.CreateCommand())
                 {
-                    totalCmd.CommandText = 
+                    DateTime today_date = DateTime.Today;
+
+                    totalCmd.CommandText = @"SELECT SUM(Quantity) FROM drinking_water WHERE date(curr_date) BETWEEN date(old_date) AND date(today_date) VALUES($old_date, $today_date)"
+                    totalCmd.Parameters.AddWithValue("$old_date",dateTime.ToString("yyyy-MM-dd"));
+                    totalCmd.Parameters.AddWithValue("$today_date",quantity);
                 }
-        }*/
+            }
 
 
         public class DrinkingWater
