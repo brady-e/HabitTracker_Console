@@ -51,13 +51,13 @@ namespace HabitTracker_Console.Models
                             Console.WriteLine("The log has been cleared!");
                         }
                         break;
-                    /*case "t":
+                    case "t":
                         Console.Clear();
                         int total_months = GetNumberInput("How many months would you like to toal?\n");
-
-
-
-                        break;*/
+                        int total = HabitRepository.TotalEntries(total_months);
+                        Console.WriteLine("________________________________\n");
+                        Console.WriteLine($"Total for {total_months} months is {total}.\n");
+                        break;
                     case "e":
                         Console.Clear();
                         endApp = true;
@@ -77,6 +77,7 @@ I - Insert new entry
 R - Read existing log entries
 U - Update an entry
 D - Delete an entry
+T - Total the log
 X - Clear the log
 E - Exit the app
 ");

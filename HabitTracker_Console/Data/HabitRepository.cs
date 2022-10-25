@@ -1,4 +1,5 @@
 ﻿using Microsoft.Data.Sqlite;
+using Microsoft.VisualBasic;
 using System;
 using System.Globalization;
 
@@ -80,7 +81,6 @@ namespace HabitTracker_Console.Data
 
                     connection.Open();
                     SqliteDataReader reader = readCmd.ExecuteReader();
-                    //return result;
 
                     if (reader.HasRows)
                     {
@@ -118,12 +118,21 @@ namespace HabitTracker_Console.Data
                 using (var totalCmd = connection.CreateCommand())
                 {
                     DateTime today_date = DateTime.Today;
+                    var old_date = today_date.AddMonths(-1*total_months);
 
-                    totalCmd.CommandText = @"SELECT SUM(Quantity) FROM drinking_water WHERE date(curr_date) BETWEEN date(old_date) AND date(today_date) VALUES($old_date, $today_date)"
-                    totalCmd.Parameters.AddWithValue("$old_date",dateTime.ToString("yyyy-MM-dd"));
-                    totalCmd.Parameters.AddWithValue("$today_date",quantity);
+                    totalCmd.CommandText = @"SELECT SUM(Quantity) FROM drinking_water WHERE date(curr_date) BETWEEN date(@sum_date) AND date(@today)";
+                    totalCmd.Parameters.AddWithValue("@sum_date", old_date.ToString("yyyy-MM-dd"));
+                    totalCmd.Parameters.AddWithValue("@today", today_date.ToString("yyyy-MM-dd"));
+
+                    connection.Open();
+                    var total = totalCmd.ExecuteScalar();
+
+                    int total_int = Convert.ToInt32(total);
+
+                    return (total_int);
                 }
             }
+        }
 
 
         public class DrinkingWater
