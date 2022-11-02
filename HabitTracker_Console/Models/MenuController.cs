@@ -21,7 +21,7 @@ namespace HabitTracker_Console.Models
                 {
                     case "i":
                         Console.Clear();
-                        var date = GetDateInput("Enter the date.\n");
+                        var date = GetDateInput("\nEnter the date.\n");
                         int quantity = GetNumberInput("\nEnter the amount of water you drank and press enter.\n");
                         HabitRepository.InsertHabit(date, quantity);
                         break;
@@ -32,13 +32,15 @@ namespace HabitTracker_Console.Models
                     case "u":
                         Console.Clear();
                         HabitRepository.GetAllRecords();
-                        int Id_to_update = GetNumberInput("Enter the Id of the entry you want to update.\n");
-                        int new_quantity = GetNumberInput("Enter the new quantity.\n");
+                        int Id_to_update = GetNumberInput("\nEnter the Id of the entry you want to update.\n");
+                        int new_quantity = GetNumberInput("\nEnter the new quantity.\n");
+                        HabitRepository.UpdateRecord(Id_to_update, new_quantity);
+                        Console.WriteLine("\nHabit Updated Successfully!");
                         break;
                     case "d":
                         Console.Clear();
                         HabitRepository.GetAllRecords();
-                        int Id_to_delete = GetNumberInput("Enter the Id you wish to delete.");
+                        int Id_to_delete = GetNumberInput("\nEnter the Id you wish to delete.\n");
                         HabitRepository.Delete(Id_to_delete);
                         break;
                     case "x":
@@ -48,22 +50,27 @@ namespace HabitTracker_Console.Models
                         if (userConfirm.ToLower() == "x")
                         {
                             HabitRepository.Delete();
-                            Console.WriteLine("The log has been cleared!");
+                            Console.WriteLine("\nThe log has been cleared!\n");
                         }
                         break;
                     case "t":
                         Console.Clear();
-                        int total_months = GetNumberInput("How many months would you like to toal?\n");
+                        int total_months = GetNumberInput("\nHow many months would you like to total?\n");
+                        if (total_months > 120000)
+                        {
+                            Console.WriteLine("\nError! Months may not exceed 120000. Returning to menu.\n");
+                            break;
+                        }
                         int total = HabitRepository.TotalEntries(total_months);
-                        Console.WriteLine("________________________________\n");
-                        Console.WriteLine($"Total for {total_months} months is {total}.\n");
+                        Console.WriteLine("\n________________________________\n");
+                        Console.WriteLine($"\nTotal for {total_months} months is {total}.\n");
                         break;
                     case "e":
                         Console.Clear();
                         endApp = true;
                         break;
                     default:
-                        Console.WriteLine("Error! Please select an option from the menu.");
+                        Console.WriteLine("\nError! Please select an option from the menu.\n");
                         break;
                 }
             }

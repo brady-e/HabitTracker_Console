@@ -10,7 +10,7 @@ internal class Program
     private static void Main(string[] args)
     {
         Console.WriteLine("Welcome to your habit tracker!");
-        Console.WriteLine("_______________________________\n");
+        Console.WriteLine("\n_______________________________");
 
         // Create the repository.
         HabitRepository.CreateDatabase();

@@ -2,6 +2,7 @@
 using Microsoft.VisualBasic;
 using System;
 using System.Globalization;
+using System.Net.Sockets;
 
 namespace HabitTracker_Console.Data
 {
@@ -90,7 +91,7 @@ namespace HabitTracker_Console.Data
                             new DrinkingWater
                             {
                                 ID = reader.GetInt32(0),
-                                Date = DateTime.ParseExact(reader.GetString(1), "yyyy-MM-dd HH:mm", new CultureInfo("en-US")),
+                                Date = DateTime.ParseExact(reader.GetString(1), "yyyy-MM-dd", new CultureInfo("en-US")),
                                 Quantity = reader.GetInt32(2)
                             }
                         ); ;
@@ -130,6 +131,21 @@ namespace HabitTracker_Console.Data
                     int total_int = Convert.ToInt32(total);
 
                     return (total_int);
+                }
+            }
+        }
+
+        public static void UpdateRecord(int ID, int quantity)
+        {
+            using (var connection = new SqliteConnection(connectionString))
+            {
+                using (var updateCmd = connection.CreateCommand())
+                {
+                    updateCmd.CommandText = @"UPDATE drinking_water SET Quantity = $quantity WHERE Id = $ID";
+                    updateCmd.Parameters.AddWithValue("$ID", ID);
+                    updateCmd.Parameters.AddWithValue("$quantity", quantity);
+                    connection.Open();
+                    updateCmd.ExecuteNonQuery();
                 }
             }
         }
