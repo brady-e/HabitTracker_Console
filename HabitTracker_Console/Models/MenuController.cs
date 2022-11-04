@@ -56,10 +56,9 @@ namespace HabitTracker_Console.Models
                     case "t":
                         Console.Clear();
                         int total_months = GetNumberInput("\nHow many months would you like to total?\n");
-                        if (total_months > 120000)
+                        while (total_months > 12000 || total_months <= 0)
                         {
-                            Console.WriteLine("\nError! Months may not exceed 120000. Returning to menu.\n");
-                            break;
+                            total_months = GetNumberInput("\nError! Number of months must be between 1 and 12000. Enter another number.\n");
                         }
                         int total = HabitRepository.TotalEntries(total_months);
                         Console.WriteLine("\n________________________________\n");
